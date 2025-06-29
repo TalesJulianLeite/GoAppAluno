@@ -1,7 +1,6 @@
 name: ci-golang-workfolw
 on: 
-  pull_request:
-    branches:
+  push:
       - develop
 jobs:
   check-applications:
