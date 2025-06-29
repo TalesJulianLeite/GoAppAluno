@@ -1,6 +1,8 @@
 name: ci-golang-workfolw
 on: 
-  [push]
+  pull_request:
+    branches:
+      - develop
 jobs:
   check-applications:
     runs-on: ubuntu-latest
