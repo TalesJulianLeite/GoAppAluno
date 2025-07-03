@@ -1,16 +1,26 @@
-name: ci-golang-workfolw
 on: 
   pull_request:
     branches:
       - develop
+
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go: [ 1.14, 1.15 ]
+        go: [1.14, 1.15]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go build
+
   check-applications:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [1.14, 1.15]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
@@ -18,4 +28,3 @@ jobs:
           go-version: ${{ matrix.go }}
       - run: go test
       - run: go run math.go
-      
