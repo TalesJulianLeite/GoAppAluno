@@ -1,16 +1,43 @@
-name: ci-golang-workfolw
 on: 
   pull_request:
     branches:
       - develop
+
 jobs:
-  check-applications:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [1.14, 1.15]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: ${{ matrix.go }}
+      - run: go build
+
+  check-applications:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [1.14, 1.15]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
       - run: go test
       - run: go run math.go
-      
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Build and Push
+        id: docker_build
+        uses: docker/setup-buildx-push-action@v2
+        with:
+          push: true
+          tags: tjleite87/go-app-aluno:latest
+          build-args: 
+            arg1=value1
+            args=value2
+
