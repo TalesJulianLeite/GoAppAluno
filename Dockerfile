@@ -1,9 +1,11 @@
-FROM golang:1.4
+FROM golang:tip-bookworm
 
 WORKDIR /app
 
+RUN go mod init teste
+
 COPY . .
-S
+
 RUN go build -o math
 
 CMD ["./math"]
